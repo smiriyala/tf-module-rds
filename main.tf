@@ -10,7 +10,7 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period = var.backup_retention_period
   preferred_backup_window = var.preferred_backup_window
   db_subnet_group_name     = aws_db_subnet_group.main.name
-  skip_final_snapshot = var.skip_final_snapshot
+  /* skip_final_snapshot = var.skip_final_snapshot */
 
   tags = merge(
     var.tags,
@@ -41,5 +41,5 @@ resource "aws_rds_cluster_instance" "main" {
 
 }
 #final_snapshot_identifier
-
+#skip_final_snapshot
 #Error: RDS Cluster final_snapshot_identifier is required when skip_final_snapshot is false
