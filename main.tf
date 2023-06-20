@@ -40,6 +40,6 @@ resource "aws_rds_cluster_instance" "main" {
   engine_version          = var.engine_version
 
 }
-final_snapshot_identifier
+#final_snapshot_identifier
 
 #Error: RDS Cluster final_snapshot_identifier is required when skip_final_snapshot is false
