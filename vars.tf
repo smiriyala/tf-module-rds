@@ -10,4 +10,4 @@ variable "backup_retention_period" {}
 variable "preferred_backup_window" {}
 variable "no_of_instances" {}
 variable "instance_class" {}
-variable "skip_final_snapshot" {}
+/* variable "skip_final_snapshot" {} */
