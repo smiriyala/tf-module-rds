@@ -28,6 +28,9 @@ resource "aws_db_subnet_group" "main" {
     var.tags,
     { Name = "${var.env}-subnet-group" }
   )
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 #Createing RDS Cluster Instance
