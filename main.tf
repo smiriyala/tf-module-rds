@@ -11,6 +11,8 @@ resource "aws_rds_cluster" "main" {
   preferred_backup_window = var.preferred_backup_window
   db_subnet_group_name     = aws_db_subnet_group.main.name
   /* skip_final_snapshot = var.skip_final_snapshot */
+  vpc_security_group_ids = [aws_security_group.main.id]
+
 
   tags = merge(
     var.tags,
@@ -46,3 +48,39 @@ resource "aws_rds_cluster_instance" "main" {
 #final_snapshot_identifier
 #skip_final_snapshot
 #Error: RDS Cluster final_snapshot_identifier is required when skip_final_snapshot is false
+
+
+##This Securigy group helps to connect RDS DB
+resource "aws_security_group" "main" {
+  name        = "rds-${var.env}"
+  description = "rds-${var.env}"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    description = "RDS"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = var.allow_subnets
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = merge(
+    var.tags,
+    { Name = "rds-${var.env}" }
+  )
+}
+
+#Crated end point parameters used in ansible shipping.service
+resource "aws_ssm_parameter" "rds_endpoint" {
+  name  = "${var.env}.rds.endpoint"
+  type  = "String"
+  value = aws_rds_cluster.main.endpoint
+}
